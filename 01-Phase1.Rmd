@@ -18,6 +18,11 @@ $$
 $$
 where $UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)$ is called the unit probability mass. 
 
+```{r, out.width="100%"}
+knitr::include_app("https://eugenehao.shinyapps.io/mtpi/", height = "800px")
+```
+
+
 
 
 ## mTPI2
