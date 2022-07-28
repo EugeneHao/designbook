@@ -168,7 +168,7 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="phase-1-design.html"><a href="phase-1-design.html"><i class="fa fa-check"></i><b>2</b> Phase 1 design</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="phase-1-design.html"><a href="phase-1-design.html#mpti"><i class="fa fa-check"></i><b>2.1</b> mPTI</a></li>
-<li class="chapter" data-level="2.2" data-path="phase-1-design.html"><a href="phase-1-design.html#mtpi2"><i class="fa fa-check"></i><b>2.2</b> mTPI2</a></li>
+<li class="chapter" data-level="2.2" data-path="phase-1-design.html"><a href="phase-1-design.html#mtpi-2"><i class="fa fa-check"></i><b>2.2</b> mTPI-2</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -205,20 +205,35 @@ div.csl-indent {
 </ul>
 <p>The mTPI design assumes the prior of <span class="math inline">\(p_d\)</span> is a Beta distribution, <span class="math inline">\(p_d \sim Beta(\alpha, \beta)\)</span>. Usually <span class="math inline">\(\alpha = \beta = 1\)</span>. The dose-finding decision rule is given by
 <span class="math display">\[
-\mathcal{D}_{mTPI} = \arg\max_{i\in \{E, S, D\}} UPM(i, d)
+\mathcal{D}_{mTPI} = \arg\max_{i\in \{E, S, D\}} UPM(i, d) 
 \]</span>
-where <span class="math inline">\(UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)\)</span> is called the unit probability mass.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="phase-1-design.html#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_app</span>(<span class="st">&quot;https://eugenehao.shinyapps.io/mtpi/&quot;</span>, <span class="at">height =</span> <span class="st">&quot;800px&quot;</span>)</span></code></pre></div>
-<iframe src="https://eugenehao.shinyapps.io/mtpi/?showcase=0" width="100%" height="800px" data-external="1">
+where <span class="math inline">\(UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)\)</span> is called the unit probability mass. In this case,
+<span class="math display">\[
+UPM(i, d) = \frac{IBeta(c_{i2}; x+1, n-x+1) - IBeta(c_{i1}; x+1, n-x+1)}{c_{i2} - c_{i1}}
+\]</span>
+where <span class="math inline">\(IBeta(q; a, b) = \frac{1}{B(a, b)}\int_0^q \theta^{a-1}(1-\theta)^{b-1}d\theta\)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="phase-1-design.html#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_app</span>(<span class="st">&quot;https://eugenehao.shinyapps.io/mtpi/&quot;</span>)</span></code></pre></div>
+<iframe src="https://eugenehao.shinyapps.io/mtpi/?showcase=0" width="100%" height="400px" data-external="1">
 </iframe>
 </div>
-<div id="mtpi2" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> mTPI2<a href="phase-1-design.html#mtpi2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mtpi-2" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> mTPI-2<a href="phase-1-design.html#mtpi-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>mTPI-2 design is an extension of mTPI by cutting the escalation interval and de-escalation interval into subintervals with the same length equal to <span class="math inline">\((\epsilon_1 + \epsilon_2)\)</span> <span class="citation">(<a href="#ref-guo2017bayesian" role="doc-biblioref">Guo et al. 2017</a>)</span>. The equivalence interval (EI) is still <span class="math inline">\((p_T - \epsilon_1, p_T+ \epsilon_2)\)</span>. However, the set of intervals below EI (LI) are <span class="math inline">\(\{(p_T - 2\epsilon_1 - \epsilon_2, p_T - \epsilon_1), \ldots, (p_T - k\epsilon_1 - (k-1)\epsilon_2, 0) \}\)</span> and the set of intervals above EI (HI) are <span class="math inline">\((p_T + \epsilon_2, p_T + \epsilon_1 + 2\epsilon_2), \ldots, (p_T + l\epsilon_1 + (l+1)\epsilon_2, 1) \}\)</span>.</p>
+<p>Let <span class="math inline">\(A_i\)</span> denote the set of intervals under the decision <span class="math inline">\(i \in \{E, S, D\}\)</span>. The decision function of mTPI-2 design is given by
+<span class="math display">\[
+\mathcal{D}_{mTPI2} = \arg\max_{i\in \{E, S, D\}} \max_{j \in A_i} UPM(j, d) 
+\]</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="phase-1-design.html#cb2-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_app</span>(<span class="st">&quot;https://eugenehao.shinyapps.io/mtpi-2/&quot;</span>)</span></code></pre></div>
+<iframe src="https://eugenehao.shinyapps.io/mtpi-2/?showcase=0" width="100%" height="400px" data-external="1">
+</iframe>
 
 </div>
 </div>
 <h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-guo2017bayesian" class="csl-entry">
+Guo, Wentian, Sue-Jane Wang, Shengjie Yang, Henry Lynn, and Yuan Ji. 2017. <span>“A Bayesian Interval Dose-Finding Design addressingOckham’s Razor: mTPI-2.”</span> <em>Contemporary Clinical Trials</em> 58: 23–33.
+</div>
 <div id="ref-ji2010modified" class="csl-entry">
 Ji, Yuan, Ping Liu, Yisheng Li, and B Nebiyou Bekele. 2010. <span>“A Modified Toxicity Probability Interval Method for Dose-Finding Trials.”</span> <em>Clinical Trials</em> 7 (6): 653–63.
 </div>

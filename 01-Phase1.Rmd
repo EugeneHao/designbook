@@ -14,15 +14,27 @@ Denote the target toxicity probability as $p_T$. There are 3 possible decisions 
 
 The mTPI design assumes the prior of $p_d$ is a Beta distribution, $p_d \sim Beta(\alpha, \beta)$. Usually $\alpha = \beta = 1$. The dose-finding decision rule is given by 
 $$
-\mathcal{D}_{mTPI} = \arg\max_{i\in \{E, S, D\}} UPM(i, d)
+\mathcal{D}_{mTPI} = \arg\max_{i\in \{E, S, D\}} UPM(i, d) 
 $$
-where $UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)$ is called the unit probability mass. 
+where $UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)$ is called the unit probability mass. In this case, 
+$$
+UPM(i, d) = \frac{IBeta(c_{i2}; x+1, n-x+1) - IBeta(c_{i1}; x+1, n-x+1)}{c_{i2} - c_{i1}}
+$$
+where $IBeta(q; a, b) = \frac{1}{B(a, b)}\int_0^q \theta^{a-1}(1-\theta)^{b-1}d\theta$. 
 
 ```{r, out.width="100%"}
-knitr::include_app("https://eugenehao.shinyapps.io/mtpi/", height = "800px")
+knitr::include_app("https://eugenehao.shinyapps.io/mtpi/")
 ```
 
+## mTPI-2
 
+mTPI-2 design is an extension of mTPI by cutting the escalation interval and de-escalation interval into subintervals with the same length equal to $(\epsilon_1 + \epsilon_2)$ [@guo2017bayesian]. The equivalence interval (EI) is still $(p_T - \epsilon_1, p_T+ \epsilon_2)$. However, the set of intervals below EI (LI) are $\{(p_T - 2\epsilon_1 - \epsilon_2, p_T - \epsilon_1), \ldots, (p_T - k\epsilon_1 - (k-1)\epsilon_2, 0) \}$ and the set of intervals above EI (HI) are $(p_T + \epsilon_2,  p_T + \epsilon_1 + 2\epsilon_2), \ldots, (p_T + l\epsilon_1 + (l+1)\epsilon_2, 1) \}$. 
 
+Let $A_i$ denote the set of intervals under the decision $i \in \{E, S, D\}$. The decision function of mTPI-2 design is given by 
+$$
+\mathcal{D}_{mTPI2} = \arg\max_{i\in \{E, S, D\}} \max_{j \in A_i} UPM(j, d) 
+$$
+```{r, out.width="100%"}
+knitr::include_app("https://eugenehao.shinyapps.io/mtpi-2/")
+```
 
-## mTPI2
