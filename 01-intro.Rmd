@@ -1,0 +1,23 @@
+# Phase 1 design
+
+## mPTI 
+
+mTPI design is short for **modified toxicity probability interval design** [@ji2010modified]. 
+
+Suppose the probability of toxicity at dose $d$ is $p_d$ and $n_d$ is the number of patient treated at dose $d$. The number of DLTs (dose limiting toxicity), $x_d$ has a binomial distribution $x_d\mid p_d \sim Bin(n_d, p_d)$. 
+
+Denote the target toxicity probability as $p_T$. There are 3 possible decisions by comparing $p_d$ and $p_T$: 
+
++ $M_E: p_d \in (0, p_T - \epsilon_1)$, escalate to the next level dose; 
++ $M_S: p_d \in (p_T - \epsilon_1, p_T + \epsilon_2)$, stay at the current dose; 
++ $M_D: p_d \in (p_T + \epsilon_2, 1)$, de-escalate to the lower level dose. 
+
+The mTPI design assumes the prior of $p_d$ is a Beta distribution, $p_d \sim Beta(\alpha, \beta)$. Usually $\alpha = \beta = 1$. The dose-finding decision rule is given by 
+$$
+\mathcal{D}_{mTPI} = \arg\max_{i\in \{E, S, D\}} UPM(i, d)
+$$
+where $UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)$ is called the unit probability mass. 
+
+
+
+## mTPI2
