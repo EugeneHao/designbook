@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Design Notebook</title>
+  <title>Chapter 2 Phase I design | Design Notebook</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Design Notebook" />
+  <meta property="og:title" content="Chapter 2 Phase I design | Design Notebook" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Design Notebook" />
+  <meta name="twitter:title" content="Chapter 2 Phase I design | Design Notebook" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
@@ -36,8 +36,8 @@ set in the _output.yml file.</p>" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="phase-ii-design.html"/>
-
+<link rel="prev" href="index.html"/>
+<link rel="next" href="phase-ii-design.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -195,22 +195,51 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered hasAnchor">
-<h1>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="phase-i-design" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Phase I design<a href="phase-i-design.html#phase-i-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="mpti" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> mPTI<a href="phase-i-design.html#mpti" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>mTPI design is short for <strong>modified toxicity probability interval design</strong> <span class="citation">(<a href="#ref-ji2010modified" role="doc-biblioref">Ji et al. 2010</a>)</span>.</p>
+<p>Suppose the probability of toxicity at dose <span class="math inline">\(d\)</span> is <span class="math inline">\(p_d\)</span> and <span class="math inline">\(n_d\)</span> is the number of patient treated at dose <span class="math inline">\(d\)</span>. The number of DLTs (dose limiting toxicity), <span class="math inline">\(x_d\)</span> has a binomial distribution <span class="math inline">\(x_d\mid p_d \sim Bin(n_d, p_d)\)</span>.</p>
+<p>Denote the target toxicity probability as <span class="math inline">\(p_T\)</span>. There are 3 possible decisions by comparing <span class="math inline">\(p_d\)</span> and <span class="math inline">\(p_T\)</span>:</p>
+<ul>
+<li><span class="math inline">\(M_E: p_d \in (0, p_T - \epsilon_1)\)</span>, escalate to the next level dose;</li>
+<li><span class="math inline">\(M_S: p_d \in (p_T - \epsilon_1, p_T + \epsilon_2)\)</span>, stay at the current dose;</li>
+<li><span class="math inline">\(M_D: p_d \in (p_T + \epsilon_2, 1)\)</span>, de-escalate to the lower level dose.</li>
+</ul>
+<p>The mTPI design assumes the prior of <span class="math inline">\(p_d\)</span> is a Beta distribution, <span class="math inline">\(p_d \sim Beta(\alpha, \beta)\)</span>. Usually <span class="math inline">\(\alpha = \beta = 1\)</span>. The dose-finding decision rule is given by
+<span class="math display">\[
+\mathcal{D}_{mTPI} = \arg\max_{i\in \{E, S, D\}} UPM(i, d) 
+\]</span>
+where <span class="math inline">\(UPM(i, d) = Pr(p_d \in M_i \mid x_d)/Pr(p_d\in M_i)\)</span> is called the unit probability mass. In this case,
+<span class="math display">\[
+UPM(i, d) = \frac{IBeta(c_{i2}; x+1, n-x+1) - IBeta(c_{i1}; x+1, n-x+1)}{c_{i2} - c_{i1}}
+\]</span>
+where <span class="math inline">\(IBeta(q; a, b) = \frac{1}{B(a, b)}\int_0^q \theta^{a-1}(1-\theta)^{b-1}d\theta\)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="phase-i-design.html#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_app</span>(<span class="st">&quot;https://eugenehao.shinyapps.io/mtpi/&quot;</span>)</span></code></pre></div>
+<iframe src="https://eugenehao.shinyapps.io/mtpi/?showcase=0" width="100%" height="400px" data-external="1">
+</iframe>
+</div>
+<div id="mtpi-2" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> mTPI-2<a href="phase-i-design.html#mtpi-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>mTPI-2 design is an extension of mTPI by cutting the escalation interval and de-escalation interval into subintervals with the same length equal to <span class="math inline">\((\epsilon_1 + \epsilon_2)\)</span> <span class="citation">(<a href="#ref-guo2017bayesian" role="doc-biblioref">Guo et al. 2017</a>)</span>. The equivalence interval (EI) is still <span class="math inline">\((p_T - \epsilon_1, p_T+ \epsilon_2)\)</span>. However, the set of intervals below EI (LI) are <span class="math inline">\(\{(p_T - 2\epsilon_1 - \epsilon_2, p_T - \epsilon_1), \ldots, (p_T - k\epsilon_1 - (k-1)\epsilon_2, 0) \}\)</span> and the set of intervals above EI (HI) are <span class="math inline">\((p_T + \epsilon_2, p_T + \epsilon_1 + 2\epsilon_2), \ldots, (p_T + l\epsilon_1 + (l+1)\epsilon_2, 1) \}\)</span>.</p>
+<p>Let <span class="math inline">\(A_i\)</span> denote the set of intervals under the decision <span class="math inline">\(i \in \{E, S, D\}\)</span>. The decision function of mTPI-2 design is given by
+<span class="math display">\[
+\mathcal{D}_{mTPI2} = \arg\max_{i\in \{E, S, D\}} \max_{j \in A_i} UPM(j, d) 
+\]</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="phase-i-design.html#cb2-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_app</span>(<span class="st">&quot;https://eugenehao.shinyapps.io/mtpi-2/&quot;</span>)</span></code></pre></div>
+<iframe src="https://eugenehao.shinyapps.io/mtpi-2/?showcase=0" width="100%" height="400px" data-external="1">
+</iframe>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent">
-<div class="csl-entry">
+<div id="ref-guo2017bayesian" class="csl-entry">
 Guo, Wentian, Sue-Jane Wang, Shengjie Yang, Henry Lynn, and Yuan Ji. 2017. <span>“A Bayesian Interval Dose-Finding Design addressingOckham’s Razor: mTPI-2.”</span> <em>Contemporary Clinical Trials</em> 58: 23–33.
 </div>
-<div class="csl-entry">
+<div id="ref-ji2010modified" class="csl-entry">
 Ji, Yuan, Ping Liu, Yisheng Li, and B Nebiyou Bekele. 2010. <span>“A Modified Toxicity Probability Interval Method for Dose-Finding Trials.”</span> <em>Clinical Trials</em> 7 (6): 653–63.
-</div>
-<div class="csl-entry">
-Jung, Sin-Ho, Taiyeong Lee, KyungMann Kim, and Stephen L George. 2004. <span>“Admissible Two-Stage Designs for Phase II Cancer Clinical Trials.”</span> <em>Statistics in Medicine</em> 23 (4): 561–69.
-</div>
-<div class="csl-entry">
-Simon, Richard. 1989. <span>“Optimal Two-Stage Designs for Phase II Clinical Trials.”</span> <em>Controlled Clinical Trials</em> 10 (1): 1–10.
-</div>
 </div>
 </div>
             </section>
@@ -218,8 +247,8 @@ Simon, Richard. 1989. <span>“Optimal Two-Stage Designs for Phase II Clinical T
           </div>
         </div>
       </div>
-<a href="phase-ii-design.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="phase-ii-design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -250,7 +279,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/references.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-Phase1.Rmd",
 "text": "Edit"
 },
 "history": {

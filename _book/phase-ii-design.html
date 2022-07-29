@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Design Notebook</title>
+  <title>Chapter 3 Phase II design | Design Notebook</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Design Notebook" />
+  <meta property="og:title" content="Chapter 3 Phase II design | Design Notebook" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Design Notebook" />
+  <meta name="twitter:title" content="Chapter 3 Phase II design | Design Notebook" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
@@ -36,8 +36,8 @@ set in the _output.yml file.</p>" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="phase-ii-design.html"/>
-
+<link rel="prev" href="phase-i-design.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -195,22 +195,69 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered hasAnchor">
-<h1>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="phase-ii-design" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Phase II design<a href="phase-ii-design.html#phase-ii-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="simons-two-stage-design" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Simon’s two-stage design<a href="phase-ii-design.html#simons-two-stage-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Simon’s two-stage design is used to minimize the expected sample size when the true response is less than some pre-determined uninterested level <span class="math inline">\(\pi_0\)</span> <span class="citation">(<a href="#ref-simon1989optimal" role="doc-biblioref">Simon 1989</a>)</span>.</p>
+<p>The null hypothesis is that <span class="math inline">\(H_0: \pi = \pi_0\)</span> and the alternative hypothesis is <span class="math inline">\(H_1: \pi = \pi_1\)</span> where <span class="math inline">\(pi_1\)</span> is some desirable level that warrant further development. Suppose the Type I and Type II errors are <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</p>
+<p>Let <span class="math inline">\(n_1\)</span> patients be given treatment in the first stage. If <span class="math inline">\(r_1\)</span> or less respond or more than <span class="math inline">\(r\)</span> respond, stop stage 1. Otherwise, let <span class="math inline">\(n_2\)</span> patients be given treatment in the second stage. <span class="math inline">\(n = n_1 + n_2\)</span>.</p>
+<p>Suppose <span class="math inline">\(X_1 \sim Bin(n_1, \pi)\)</span> and <span class="math inline">\(X_2 \sim Bin(n_2, \pi)\)</span>. We declare the new drug a</p>
+<ul>
+<li>Failure if
+<span class="math inline">\(\xi_F = X_1 \leq r_1 \text{ OR } \{X_1 &gt; r_1 \text { AND } X_1 + X_2 \leq r \}\)</span></li>
+<li>Success if <span class="math inline">\(\xi_S = \{X_1 &gt; r_1 \text{ AND } X_1 + X_2 &gt; r \}\)</span></li>
+</ul>
+<p>Therefore,
+<span class="math display">\[
+P(\xi_F \mid \pi \leq \pi_0) \leq \alpha,  \quad P(\xi_S \mid \pi \geq \pi_1) \geq 1- \beta
+\]</span></p>
+<p>Moreover, we have
+<span class="math display">\[\begin{aligned}
+P(\xi_S \mid \pi) &amp; = \sum_{m_1 &gt; r_1, m_1 + m_2 &gt; r} P(X_1 = m_1\mid \pi)P(X_2 = m_2\mid \pi) \\
+P(\xi_F \mid \pi) &amp; = 1- P(\xi_S \mid \pi)
+\end{aligned}\]</span></p>
+<p>The expected sample size <span class="math inline">\(EN(\pi_0)\)</span> is given by
+<span class="math display">\[
+n_1\left[P(X_1 \leq r_1\mid \pi = \pi_0) + P(X_1 &gt; r\mid \pi = \pi_0) \right] + nP(r_1 + 1 \leq X_1 \leq r \mid \pi = \pi_0)
+\]</span>
+The probability of early termination is <span class="math inline">\(PET(\pi_0) = P(X_1 \leq r_1 \text{ OR } X_1 &gt;r\mid \pi = \pi_0)\)</span>.</p>
+<p>There are several choices to select <span class="math inline">\((r_1, n_1, r, n)\)</span>:</p>
+<ul>
+<li><strong>Optimal design</strong>: the one has the smallest expected sample size when <span class="math inline">\(\pi = \pi_0\)</span>.</li>
+<li><strong>Minimax design</strong>: the one has the smallest total sample size for the whole trial when <span class="math inline">\(\pi = \pi_0\)</span>.</li>
+<li><strong>Adimssible design</strong>: compromise the minimax and the optimal design. <span class="citation">(<a href="#ref-jung2004admissible" role="doc-biblioref">Jung et al. 2004</a>)</span></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="phase-ii-design.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clinfun)</span>
+<span id="cb3-2"><a href="phase-ii-design.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ph2simon</span>(<span class="at">pu =</span> <span class="fl">0.2</span>, <span class="at">pa =</span> <span class="fl">0.4</span>, <span class="at">ep1 =</span> <span class="fl">0.1</span>, <span class="at">ep2 =</span> <span class="fl">0.2</span>)</span></code></pre></div>
+<pre><code>## 
+##  Simon 2-stage Phase II design 
+## 
+## Unacceptable response rate:  0.2 
+## Desirable response rate:  0.4 
+## Error rates: alpha =  0.1 ; beta =  0.2 
+## 
+##         r1 n1 r  n EN(p0) PET(p0)
+## Optimal  2 12 7 25  17.74  0.5583
+## Minimax  2 14 7 24  19.52  0.4481</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="phase-ii-design.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ph2mult)</span>
+<span id="cb5-2"><a href="phase-ii-design.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">binom.design</span>(<span class="at">type =</span> <span class="st">&quot;admissible&quot;</span>, <span class="at">p0 =</span> <span class="fl">0.15</span>, <span class="at">p1 =</span> <span class="fl">0.3</span>, </span>
+<span id="cb5-3"><a href="phase-ii-design.html#cb5-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">signif.level =</span> <span class="fl">0.05</span>, <span class="at">power.level =</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>##              r1 n1  r  n   EN.p0.   PET.p0.      error     power
+## Optimal       5 30 17 82 45.05006 0.7105757 0.04609244 0.9007424
+## Admissible    5 31 16 76 45.28032 0.6826597 0.04694758 0.9037415
+## Admissible.1  6 36 15 70 45.86191 0.7099439 0.04654875 0.9000510
+## Minimax       6 42 14 64 51.80052 0.5545216 0.04845876 0.9002785</code></pre>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent">
-<div class="csl-entry">
-Guo, Wentian, Sue-Jane Wang, Shengjie Yang, Henry Lynn, and Yuan Ji. 2017. <span>“A Bayesian Interval Dose-Finding Design addressingOckham’s Razor: mTPI-2.”</span> <em>Contemporary Clinical Trials</em> 58: 23–33.
-</div>
-<div class="csl-entry">
-Ji, Yuan, Ping Liu, Yisheng Li, and B Nebiyou Bekele. 2010. <span>“A Modified Toxicity Probability Interval Method for Dose-Finding Trials.”</span> <em>Clinical Trials</em> 7 (6): 653–63.
-</div>
-<div class="csl-entry">
+<div id="ref-jung2004admissible" class="csl-entry">
 Jung, Sin-Ho, Taiyeong Lee, KyungMann Kim, and Stephen L George. 2004. <span>“Admissible Two-Stage Designs for Phase II Cancer Clinical Trials.”</span> <em>Statistics in Medicine</em> 23 (4): 561–69.
 </div>
-<div class="csl-entry">
+<div id="ref-simon1989optimal" class="csl-entry">
 Simon, Richard. 1989. <span>“Optimal Two-Stage Designs for Phase II Clinical Trials.”</span> <em>Controlled Clinical Trials</em> 10 (1): 1–10.
-</div>
 </div>
 </div>
             </section>
@@ -218,8 +265,8 @@ Simon, Richard. 1989. <span>“Optimal Two-Stage Designs for Phase II Clinical T
           </div>
         </div>
       </div>
-<a href="phase-ii-design.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="phase-i-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -250,7 +297,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/references.Rmd",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-Phase2.Rmd",
 "text": "Edit"
 },
 "history": {

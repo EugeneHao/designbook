@@ -1,5 +1,6 @@
 about
-phase-1-design
+phase-i-design
 mpti
-mtpi2
 mtpi-2
+phase-ii-design
+simons-two-stage-design
