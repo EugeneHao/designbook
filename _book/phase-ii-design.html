@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Hao Sun" />
 
 
-<meta name="date" content="2022-07-28" />
+<meta name="date" content="2022-07-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -214,14 +214,15 @@ P(\xi_F \mid \pi \leq \pi_0) \leq \alpha,  \quad P(\xi_S \mid \pi \geq \pi_1) \g
 \]</span></p>
 <p>Moreover, we have
 <span class="math display">\[\begin{aligned}
-P(\xi_S \mid \pi) &amp; = \sum_{m_1 &gt; r_1, m_1 + m_2 &gt; r} P(X_1 = m_1\mid \pi)P(X_2 = m_2\mid \pi) \\
-P(\xi_F \mid \pi) &amp; = 1- P(\xi_S \mid \pi)
+P(\xi_S \mid \pi) &amp; = \sum_{m_1 &gt; r_1, m_1 + m_2 &gt; r} b(m_1; n_1, \pi)b(m_2; n_2, \pi) \\
+P(\xi_F \mid \pi) &amp; = 1- P(\xi_S \mid \pi) \\
+&amp; = B(r_1; n_1, \pi) + \sum_{x = r_1 + 1}^{\min\{n_1, r\}}b(x; n_1, \pi)B(r-x; n_2, \pi)
 \end{aligned}\]</span></p>
 <p>The expected sample size <span class="math inline">\(EN(\pi_0)\)</span> is given by
 <span class="math display">\[
 n_1\left[P(X_1 \leq r_1\mid \pi = \pi_0) + P(X_1 &gt; r\mid \pi = \pi_0) \right] + nP(r_1 + 1 \leq X_1 \leq r \mid \pi = \pi_0)
 \]</span>
-The probability of early termination is <span class="math inline">\(PET(\pi_0) = P(X_1 \leq r_1 \text{ OR } X_1 &gt;r\mid \pi = \pi_0)\)</span>.</p>
+The probability of early rejection in stage 1 is <span class="math inline">\(PET(\pi_0) = P(X_1 \leq r_1 \mid \pi = \pi_0)\)</span>.</p>
 <p>There are several choices to select <span class="math inline">\((r_1, n_1, r, n)\)</span>:</p>
 <ul>
 <li><strong>Optimal design</strong>: the one has the smallest expected sample size when <span class="math inline">\(\pi = \pi_0\)</span>.</li>

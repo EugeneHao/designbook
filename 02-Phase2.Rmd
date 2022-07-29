@@ -21,15 +21,16 @@ $$
 
 Moreover, we have 
 $$\begin{aligned}
-P(\xi_S \mid \pi) & = \sum_{m_1 > r_1, m_1 + m_2 > r} P(X_1 = m_1\mid \pi)P(X_2 = m_2\mid \pi) \\
-P(\xi_F \mid \pi) & = 1- P(\xi_S \mid \pi)
+P(\xi_S \mid \pi) & = \sum_{m_1 > r_1, m_1 + m_2 > r} b(m_1; n_1, \pi)b(m_2; n_2, \pi) \\
+P(\xi_F \mid \pi) & = 1- P(\xi_S \mid \pi) \\
+& = B(r_1; n_1, \pi) + \sum_{x = r_1 + 1}^{\min\{n_1, r\}}b(x; n_1, \pi)B(r-x; n_2, \pi)
 \end{aligned}$$
 
 The expected sample size $EN(\pi_0)$ is given by 
 $$
 n_1\left[P(X_1 \leq r_1\mid \pi = \pi_0) + P(X_1 > r\mid \pi = \pi_0) \right] + nP(r_1 + 1 \leq X_1 \leq r \mid \pi = \pi_0)
 $$
-The probability of early termination is $PET(\pi_0) = P(X_1 \leq r_1 \text{ OR } X_1 >r\mid \pi = \pi_0)$.  
+The probability of early rejection in stage 1 is $PET(\pi_0) = P(X_1 \leq r_1 \mid \pi = \pi_0)$.  
 
 There are several choices to select $(r_1, n_1, r, n)$: 
 
