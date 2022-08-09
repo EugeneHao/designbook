@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Hao Sun" />
 
 
-<meta name="date" content="2022-07-29" />
+<meta name="date" content="2022-07-31" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -169,6 +169,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="phase-i-design.html"><a href="phase-i-design.html#mpti"><i class="fa fa-check"></i><b>2.1</b> mPTI</a></li>
 <li class="chapter" data-level="2.2" data-path="phase-i-design.html"><a href="phase-i-design.html#mtpi-2"><i class="fa fa-check"></i><b>2.2</b> mTPI-2</a></li>
+<li class="chapter" data-level="2.3" data-path="phase-i-design.html"><a href="phase-i-design.html#boin"><i class="fa fa-check"></i><b>2.3</b> BOIN</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="phase-ii-design.html"><a href="phase-ii-design.html"><i class="fa fa-check"></i><b>3</b> Phase II design</a>
 <ul>
@@ -232,6 +233,92 @@ where <span class="math inline">\(IBeta(q; a, b) = \frac{1}{B(a, b)}\int_0^q \th
 </iframe>
 
 </div>
+<div id="boin" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> BOIN<a href="phase-i-design.html#boin" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>BOIN is short for Bayesian optimal interval design. Suppose we have <span class="math inline">\(J\)</span> prespecified doses. At the current dose level <span class="math inline">\(j\)</span>, <span class="math inline">\(n_j\)</span> patients are treated and <span class="math inline">\(m_j\)</span> of them have experienced a toxicity. Let <span class="math inline">\(\lambda_{1j}(n_j, \phi)\)</span> and <span class="math inline">\(\lambda_{2j}(n_j, \phi)\)</span> be the prespecified lower and upper boundaries of the interval with <span class="math inline">\(0 \leq \lambda_{1j}(n_j, \phi) \leq \lambda_2(n_j, \phi) \leq 1\)</span> where <span class="math inline">\(\phi\)</span> is the target toxicity level. <span class="citation">(<a href="#ref-liu2015bayesian" role="doc-biblioref">Liu and Yuan 2015</a>)</span></p>
+<p>The next cohort dose assignment will be decided by the following steps:</p>
+<ul>
+<li>if <span class="math inline">\(m_j/n_j \in [0, \lambda_{1j}]\)</span>: escalate to the next dose level <span class="math inline">\(j+1\)</span>;</li>
+<li>if <span class="math inline">\(m_j/n_j \in (\lambda_{1j}, \lambda_{2j})\)</span>: stay at the dose level <span class="math inline">\(j\)</span>;</li>
+<li>if <span class="math inline">\(m_j/n_j \in [\lambda_{2j}, 1]\)</span>: de-escalate to the dose level <span class="math inline">\(j-1\)</span>.</li>
+</ul>
+<div id="local-boin" class="section level5 unnumbered hasAnchor">
+<h5>Local BOIN<a href="phase-i-design.html#local-boin" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Define the three point hypothesis as:
+<span class="math display">\[
+\begin{aligned}
+H_{0j}: p_j &amp; = \phi \\ 
+H_{1j}: p_j &amp; = \phi_1\\
+H_{2j}: p_j &amp; = \phi_2
+\end{aligned}
+\]</span></p>
+<p>The correct decisions under <span class="math inline">\(H_0\)</span>, <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are retainment (R), escalation (E) and de-escalation (D). Suppose <span class="math inline">\(Bin(x; n, p)\)</span> as the CDF of a binomial distribution. The probability of making incorrect decision is given by</p>
+<p><span class="math display">\[
+\begin{aligned}
+\alpha(\lambda_1, \lambda_2) &amp;= Pr(H_0)Pr(\bar R\mid H_0) + Pr(H_1)Pr(\bar E\mid H_1) + Pr(H_2)Pr(\bar D\mid H_2) \\
+&amp; = \pi_0\left\{Bin(n\lambda_1; n, \phi) + 1 - Bin(n\lambda_2; n, \phi) \right\} + \pi_1(1 - Bin(n\lambda_1; n, \phi_1)) + \pi_2 Bin(n\lambda_2; n, \phi_2) \\
+&amp; = \alpha_1(\lambda_1) + \alpha_2(\lambda_2) + \pi_0 + \pi_1
+\end{aligned}
+\]</span>
+where
+<span class="math display">\[\begin{aligned}
+\alpha_1(\lambda_1) &amp; = \pi_0Bin(n\lambda_1; n, \phi) - \pi_1Bin(n\lambda_1; n, \phi) \\
+&amp; = \sum_{y=0}^{b_{j}} \pi_{1}\left(\begin{array}{c}n \\ y\end{array}\right) \phi_{1}^{y}\left(1-\phi_{1}\right)^{n-y}\left\{\frac{\pi_{0 }}{\pi_{1}}\left(\frac{\phi}{\phi_{1}}\right)^{y}\left(\frac{1-\phi}{1-\phi_{1}}\right)^{n-y}-1\right\}
+\end{aligned}
+\]</span>
+and
+<span class="math display">\[
+\alpha_2(\lambda_2) = \pi_2Bin(n\lambda_2; n, \phi_2) - \pi_0Bin(n\lambda_2; n, \phi). 
+\]</span></p>
+<p><span class="math inline">\(\alpha_1(\lambda_1)\)</span> is minimized when
+<span class="math display">\[
+n\lambda_1 = \max\left\{y: \frac{\pi_{0 }}{\pi_{1}}\left(\frac{\phi}{\phi_{1}}\right)^{y}\left(\frac{1-\phi}{1-\phi_{1}}\right)^{n-y} \leq 1 \right\} = \max \left\{y: \frac{Pr(H_0\mid y)}{Pr(H_1\mid y)} \leq 1\right\}
+\]</span>
+which leads to the solution
+<span class="math display">\[
+\lambda_{1}=\frac{\log \left(\frac{1-\phi_{1}}{1-\phi}\right)+n_{j}^{-1} \log \left(\frac{\pi_{1}}{\pi_{0}}\right)}{\log \left(\frac{\phi\left(1-\phi_{1}\right)}{\phi_{1}(1-\phi)}\right)}. 
+\]</span>
+Similarly,
+<span class="math display">\[
+n\lambda_2 = \max \left\{y: \frac{Pr(H_2\mid y)}{Pr(H_1\mid y)} \leq 1\right\}
+\]</span>
+with solution
+<span class="math display">\[
+\lambda_{2}=\frac{\log \left(\frac{1-\phi}{1-\phi_2}\right)+n_{j}^{-1} \log \left(\frac{\pi_0}{\pi_{2 }}\right)}{\log \left(\frac{\phi_2\left(1-\phi\right)}{\phi(1-\phi_2)}\right)}. 
+\]</span></p>
+</div>
+<div id="global-boin" class="section level5 unnumbered hasAnchor">
+<h5>Global BOIN<a href="phase-i-design.html#global-boin" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Define the three composite hypothesis as:
+<span class="math display">\[
+\begin{aligned}
+H_{0j} &amp;: \phi_1 &lt; p_j &lt; \phi_2 \\ 
+H_{1j} &amp;: 0 \leq p_j \leq \phi_1\\
+H_{2j} &amp;: \phi_2 \leq p_j \leq 1
+\end{aligned}
+\]</span>
+In this case,
+<span class="math display">\[\begin{aligned}
+Pr(\bar R\mid H_0) &amp; = \int f(p)Pr(\bar R\mid p, H_0)dp \\
+Pr(\bar E\mid H_1) &amp; = \int f(p)Pr(\bar E\mid p, H_1)dp \\
+Pr(\bar D\mid H_2) &amp; = \int f(p)Pr(\bar D\mid p, H_2)dp
+\end{aligned}\]</span>
+Therefore,
+<span class="math display">\[
+\alpha(\lambda_1, \lambda_2) = Pr(H_{0}) + Pr(H_{1}) + \underbrace{\sum_{y = 0}^{b_{1}}f(y)\{Pr(H_0\mid y) - Pr(H_1\mid y) \}}_{\alpha_{g1}(\lambda_1)} + \underbrace{\sum_{y=0}^{b_2 - 1}\{Pr(H_2\mid y) - Pr(H_0\mid y) \}}_{\alpha_{g2}(\lambda_2)}
+\]</span>
+where <span class="math inline">\(b_1 = \lfloor n\lambda_1\rfloor\)</span> and <span class="math inline">\(b_2 = \lfloor n\lambda_2 \rfloor\)</span>. Stilly, we can minimize <span class="math inline">\(\alpha_{g1}(\lambda_1)\)</span> and <span class="math inline">\(\alpha_{g2}(\lambda_2)\)</span> when
+<span class="math display">\[
+n\lambda_1 = \max \left\{y: \frac{Pr(H_0\mid y)}{Pr(H_1\mid y)} \leq 1\right\}, \quad
+n\lambda_2 = \max \left\{y: \frac{Pr(H_2\mid y)}{Pr(H_0\mid y)} \leq 1\right\}.
+\]</span></p>
+<p>Therefore, no matter we use local BOIN or global BOIN, the decision function can be defined as
+<span class="math display">\[
+\mathcal{D}_{BOIN} = \max_{i \in 0, 1, 2} Pr(H_i\mid y)
+\]</span></p>
+
+</div>
+</div>
 </div>
 <h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent">
@@ -240,6 +327,9 @@ Guo, Wentian, Sue-Jane Wang, Shengjie Yang, Henry Lynn, and Yuan Ji. 2017. <span
 </div>
 <div id="ref-ji2010modified" class="csl-entry">
 Ji, Yuan, Ping Liu, Yisheng Li, and B Nebiyou Bekele. 2010. <span>“A Modified Toxicity Probability Interval Method for Dose-Finding Trials.”</span> <em>Clinical Trials</em> 7 (6): 653–63.
+</div>
+<div id="ref-liu2015bayesian" class="csl-entry">
+Liu, Suyu, and Ying Yuan. 2015. <span>“Bayesian Optimal Interval Designs for Phase i Clinical Trials.”</span> <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 64 (3): 507–23.
 </div>
 </div>
             </section>

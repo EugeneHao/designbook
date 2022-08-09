@@ -1,0 +1,88 @@
+## BOIN 
+
+BOIN is short for Bayesian optimal interval design. Suppose we have $J$ prespecified doses. At the current dose level $j$, $n_j$ patients are treated and $m_j$ of them have experienced a toxicity. Let $\lambda_{1j}(n_j, \phi)$ and $\lambda_{2j}(n_j, \phi)$ be the prespecified lower and upper boundaries of the interval with $0 \leq \lambda_{1j}(n_j, \phi) \leq \lambda_2(n_j, \phi) \leq 1$ where $\phi$ is the target toxicity level. [@liu2015bayesian]
+
+The next cohort dose assignment will be decided by the following steps: 
+
++ if $m_j/n_j \in [0, \lambda_{1j}]$: escalate to the next dose level $j+1$; 
++ if $m_j/n_j \in (\lambda_{1j}, \lambda_{2j})$: stay at the dose level $j$; 
++ if $m_j/n_j \in [\lambda_{2j}, 1]$: de-escalate to the dose level $j-1$. 
+
+##### Local BOIN {-}
+Define the three point hypothesis as: 
+$$
+\begin{aligned}
+H_{0j}: p_j & = \phi \\ 
+H_{1j}: p_j & = \phi_1\\
+H_{2j}: p_j & = \phi_2
+\end{aligned}
+$$
+
+The correct decisions under $H_0$, $H_1$ and $H_2$ are retainment (R), escalation (E) and de-escalation (D). Suppose $Bin(x; n, p)$ as the CDF of a binomial distribution. The probability of making incorrect decision is given by 
+
+$$
+\begin{aligned}
+\alpha(\lambda_1, \lambda_2) &= Pr(H_0)Pr(\bar R\mid H_0) + Pr(H_1)Pr(\bar E\mid H_1) + Pr(H_2)Pr(\bar D\mid H_2) \\
+& = \pi_0\left\{Bin(n\lambda_1; n, \phi) + 1 - Bin(n\lambda_2; n, \phi) \right\} + \pi_1(1 - Bin(n\lambda_1; n, \phi_1)) + \pi_2 Bin(n\lambda_2; n, \phi_2) \\
+& = \alpha_1(\lambda_1) + \alpha_2(\lambda_2) + \pi_0 + \pi_1
+\end{aligned}
+$$
+where 
+$$\begin{aligned}
+\alpha_1(\lambda_1) & = \pi_0Bin(n\lambda_1; n, \phi) - \pi_1Bin(n\lambda_1; n, \phi) \\
+& = \sum_{y=0}^{b_{j}} \pi_{1}\left(\begin{array}{c}n \\ y\end{array}\right) \phi_{1}^{y}\left(1-\phi_{1}\right)^{n-y}\left\{\frac{\pi_{0 }}{\pi_{1}}\left(\frac{\phi}{\phi_{1}}\right)^{y}\left(\frac{1-\phi}{1-\phi_{1}}\right)^{n-y}-1\right\}
+\end{aligned}
+$$
+and 
+$$
+\alpha_2(\lambda_2) = \pi_2Bin(n\lambda_2; n, \phi_2) - \pi_0Bin(n\lambda_2; n, \phi). 
+$$
+
+
+
+$\alpha_1(\lambda_1)$ is minimized when 
+$$
+n\lambda_1 = \max\left\{y: \frac{\pi_{0 }}{\pi_{1}}\left(\frac{\phi}{\phi_{1}}\right)^{y}\left(\frac{1-\phi}{1-\phi_{1}}\right)^{n-y} \leq 1 \right\} = \max \left\{y: \frac{Pr(H_0\mid y)}{Pr(H_1\mid y)} \leq 1\right\}
+$$
+which leads to the solution 
+$$
+\lambda_{1}=\frac{\log \left(\frac{1-\phi_{1}}{1-\phi}\right)+n_{j}^{-1} \log \left(\frac{\pi_{1}}{\pi_{0}}\right)}{\log \left(\frac{\phi\left(1-\phi_{1}\right)}{\phi_{1}(1-\phi)}\right)}. 
+$$
+Similarly, 
+$$
+n\lambda_2 = \max \left\{y: \frac{Pr(H_2\mid y)}{Pr(H_1\mid y)} \leq 1\right\}
+$$
+with solution 
+$$
+\lambda_{2}=\frac{\log \left(\frac{1-\phi}{1-\phi_2}\right)+n_{j}^{-1} \log \left(\frac{\pi_0}{\pi_{2 }}\right)}{\log \left(\frac{\phi_2\left(1-\phi\right)}{\phi(1-\phi_2)}\right)}. 
+$$
+
+##### Global BOIN {-}
+Define the three composite hypothesis as: 
+$$
+\begin{aligned}
+H_{0j} &: \phi_1 < p_j < \phi_2 \\ 
+H_{1j} &: 0 \leq p_j \leq \phi_1\\
+H_{2j} &: \phi_2 \leq p_j \leq 1
+\end{aligned}
+$$
+In this case, 
+$$\begin{aligned}
+Pr(\bar R\mid H_0) & = \int f(p)Pr(\bar R\mid p, H_0)dp \\
+Pr(\bar E\mid H_1) & = \int f(p)Pr(\bar E\mid p, H_1)dp \\
+Pr(\bar D\mid H_2) & = \int f(p)Pr(\bar D\mid p, H_2)dp
+\end{aligned}$$
+Therefore, 
+$$
+\alpha(\lambda_1, \lambda_2) = Pr(H_{0}) + Pr(H_{1}) + \underbrace{\sum_{y = 0}^{b_{1}}f(y)\{Pr(H_0\mid y) - Pr(H_1\mid y) \}}_{\alpha_{g1}(\lambda_1)} + \underbrace{\sum_{y=0}^{b_2 - 1}\{Pr(H_2\mid y) - Pr(H_0\mid y) \}}_{\alpha_{g2}(\lambda_2)}
+$$
+where $b_1 = \lfloor n\lambda_1\rfloor$ and $b_2 = \lfloor n\lambda_2 \rfloor$. Stilly, we can minimize $\alpha_{g1}(\lambda_1)$ and $\alpha_{g2}(\lambda_2)$ when 
+$$
+n\lambda_1 = \max \left\{y: \frac{Pr(H_0\mid y)}{Pr(H_1\mid y)} \leq 1\right\}, \quad
+n\lambda_2 = \max \left\{y: \frac{Pr(H_2\mid y)}{Pr(H_0\mid y)} \leq 1\right\}.
+$$
+
+Therefore, no matter we use local BOIN or global BOIN, the decision function can be defined as 
+$$
+\mathcal{D}_{BOIN} = \max_{i \in 0, 1, 2} Pr(H_i\mid y)
+$$
